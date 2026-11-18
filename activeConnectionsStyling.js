@@ -84,7 +84,7 @@
     let customProjectIds = [];
     customProjectsContainer.id = "test";
     customProjectsContainer.className = phoenixContainer.className;
-    
+
     // update custom projects list on mutation observer
     function phoenixContainerChangeCallback() {
       const projects = phoenixContainer.children;
@@ -104,7 +104,6 @@
 
         const projectStartButton = project.querySelector(".connectMachineStart");
         const projectCloneStartButton = projectClone.querySelector(".connectMachineStart");
-        // // projectCloneStartButton.addEventListener('click', projectStartButton.click);
         projectCloneStartButton.onclick = function () {
           projectStartButton.click();
         };
