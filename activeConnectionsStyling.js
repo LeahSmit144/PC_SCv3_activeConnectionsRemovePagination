@@ -13,22 +13,22 @@
 // @description   restyle active connections page to remove pagination in favor of a scrollable list with search bar functionality.
 // ==/UserScript==
 
-(function() {
+(function () {
 
   //------------------------------------------------------------------------------------------------------
   // Main (main parameters, main function calls)
   //------------------------------------------------------------------------------------------------------
 
   const machinePageList = document.getElementsByClassName("machine_page");
-  if(machinePageList.length !== 2) {
-      alert("kan lijst met projecten niet vinden in pagina.");
+  if (machinePageList.length !== 2) {
+    alert("'Alternatieve styling script' kan lijst met projecten niet vinden in pagina.");
   }
   const machinePage = machinePageList[1];
 
-  // default container. hide this.
+  // default container for online 'machines'.
   const phoenixContainer = machinePage.children[0];
-  phoenixContainer.style = "display: none;"
 
+  // create a new container for project clones.
   const customProjectsContainer = document.createElement("div");
   createSearchBar();
   createCustomList();
@@ -40,19 +40,19 @@
 
   function createSearchBar() {
     const searchBarContainer = document.createElement("div");
-    searchBarContainer.style = "display: flex; margin: 0 30px 15px 30px;"
+    searchBarContainer.style = "display: flex; margin: 0 30px 15px 30px;";
 
     const searchLabel = document.createElement("label");
     searchLabel.style = "margin: auto 5px auto 1px; font-size: initial;";
-    searchLabel.innerText = "Zoek op projectnaam of -nummer: "
+    searchLabel.innerText = "Zoek op projectnaam of -nummer: ";
 
     const searchBar = document.createElement("input");
-    searchBar.style = "min-width: 350px; padding: 4px 12px; font-size: initial;"
-    searchBar.oninput = function() {
+    searchBar.style = "min-width: 350px; padding: 4px 12px; font-size: initial;";
+    searchBar.oninput = function () {
       const searchInput = searchBar.value;
 
       const projectNodes = new Array(...customProjectsContainer.childNodes);
-      for(const projectNode of projectNodes) {
+      for (const projectNode of projectNodes) {
         const infoNode = projectNode.firstElementChild;
         const nameNode = infoNode.querySelector("#machine_id");
         const name = nameNode.textContent;
@@ -72,6 +72,8 @@
   //------------------------------------------------------------------------------------------------------
 
   function createCustomList() {
+    // default container. hide this.
+    phoenixContainer.style = "display: none;"
     // default paginator. hide this.
     const paginator = document.getElementById("js_paginator");
     paginator.style = "display: none;"
@@ -82,8 +84,7 @@
     let customProjectIds = [];
     customProjectsContainer.id = "test";
     customProjectsContainer.className = phoenixContainer.className;
-    machinePage.appendChild(customProjectsContainer);
-
+    
     // update custom projects list on mutation observer
     function phoenixContainerChangeCallback() {
       const projects = phoenixContainer.children;
@@ -93,7 +94,7 @@
         const itemId = project.firstElementChild.id;
         newCustomProjectIds.push(itemId);
 
-        if(customProjectIds.find(existingId => existingId === itemId) !== undefined) {
+        if (customProjectIds.find(existingId => existingId === itemId) !== undefined) {
           continue;
         }
 
@@ -104,15 +105,15 @@
         const projectStartButton = project.querySelector(".connectMachineStart");
         const projectCloneStartButton = projectClone.querySelector(".connectMachineStart");
         // // projectCloneStartButton.addEventListener('click', projectStartButton.click);
-         projectCloneStartButton.onclick = function() {
-           projectStartButton.click();
-         };
+        projectCloneStartButton.onclick = function () {
+          projectStartButton.click();
+        };
 
         customProjectsContainer.appendChild(projectClone);
       }
 
-      for(const customProjectId of customProjectIds) {
-        if(newCustomProjectIds.find(currentId => currentId === customProjectId) !== undefined) {
+      for (const customProjectId of customProjectIds) {
+        if (newCustomProjectIds.find(currentId => currentId === customProjectId) !== undefined) {
           continue;
         }
 
@@ -124,7 +125,8 @@
       customProjectIds = newCustomProjectIds;
     }
 
+    machinePage.appendChild(customProjectsContainer);
     const observer = new MutationObserver(phoenixContainerChangeCallback);
-    observer.observe(phoenixContainer, {subtree: true, childList: true, attributes: true});
+    observer.observe(phoenixContainer, { subtree: true, childList: true, attributes: true });
   }
 })();
