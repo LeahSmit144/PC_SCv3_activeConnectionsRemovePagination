@@ -99,6 +99,12 @@
         projectClone.className = "machine_box active_machine_box box_online";
         projectClone.style = "display: block;";
 
+        const projectStartButton = project.querySelector(".connectMachineStart");
+        const projectCloneStartButton = projectClone.querySelector(".connectMachineStart");
+         projectCloneStartButton.onclick = function() {
+           projectStartButton.click();
+         };
+
         customProjectsContainer.appendChild(projectClone);
       }
 
@@ -119,3 +125,5 @@
     observer.observe(phoenixContainer, {subtree: true, childList: true, attributes: true});
   }
 })();
+
+
